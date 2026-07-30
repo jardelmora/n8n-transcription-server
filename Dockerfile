@@ -2,21 +2,21 @@ FROM n8nio/n8n:2.32.6
 
 USER root
 
-RUN apk add --no-cache \
-    ffmpeg \
-    python3 \
-    py3-pip \
-    curl \
-    ca-certificates
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        ffmpeg \
+        python3 \
+        python3-pip \
+        curl \
+        ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
 
-RUN python3 -m pip install --upgrade pip
-
-RUN pip3 install \
+RUN python3 -m pip install \
     --break-system-packages \
     --no-cache-dir \
     yt-dlp
 
-RUN mkdir -p /home/node/.n8n-files/youtube \
-    && chown -R node:node /home/node/.n8n-files
+RUN mkdir -p /home/node/.n8n/youtube \
+    && chown -R node:node /home/node/.n8n
 
 USER node
